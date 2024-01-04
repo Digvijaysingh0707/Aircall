@@ -13,7 +13,7 @@
 }
 
 .chat-item {
-  border-bottom: 1px dashed #ccc;
+  /* border-bottom: 1px dashed #ccc; */
   padding: 10px;
   padding-bottom: 0;
   display: flex;
@@ -50,9 +50,9 @@ button {
 }
 
 .contact-details {
-  /* flex-grow: 1; */
+  flex-grow: 1;
   display: flex;
-  margin-left: -170px;
+  /* margin-left: -170px; */
   flex-direction: column;
 }
 
