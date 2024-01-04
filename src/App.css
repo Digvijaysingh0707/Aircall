@@ -50,8 +50,9 @@ button {
 }
 
 .contact-details {
-  flex-grow: 1;
+  /* flex-grow: 1; */
   display: flex;
+  margin-left: -170px;
   flex-direction: column;
 }
 
@@ -114,7 +115,7 @@ button {
   align-items: center;
 }
 
-.bell-icon{
+.bell-icon {
   width: 20px;
   height: 20px;
   border-radius: 50%;
@@ -136,7 +137,7 @@ button {
 
 
 /* ------------------------TopNavbar---------------------------- */
-.t-navbar{
+.t-navbar {
   display: flex;
   justify-content: space-around;
   font: 500;
@@ -144,14 +145,14 @@ button {
   align-items: center;
 }
 
-.activity{
+.activity {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  gap:10px
+  gap: 10px
 }
 
-.activity-icon{
+.activity-icon {
   width: 30px;
   height: 30px;
 }
