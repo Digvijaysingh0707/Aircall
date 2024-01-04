@@ -186,29 +186,35 @@ const CallList = () => {
 
   return (
     <div className="aircall-phone-container">
-      <TopNavbar />
       {!checkArchived ? (
         <div
           style={{
             display: "flex",
             alignItems: "center",
-            borderBottom: "1px solid #ccc",
+            border: "1px solid #ccc",
+            padding: '5px',
+            borderRadius: '10px',
+            cursor: 'pointer',
+            marginBottom: '-10px'
+
           }}
-        >
-          <img src={ArchiveIcon} style={{ width: "20px", height: "20px" }} />
+          onClick={() => setCheckArchived(!checkArchived)}>
+          <img src={ArchiveIcon} style={{ width: "20px", marginLeft: '10px', height: "20px", marginTop: '5px' }} />
           <div
             className="chat-item"
             style={{
               fontSize: "20px",
               color: "gray",
-              marginLeft: "5px",
-              cursor: "pointer",
+              marginLeft: "1px",
+              marginBottom: '5px'
             }}
-            onClick={() => setCheckArchived(!checkArchived)}
           >
+
             Archived ({archivedCallList?.length})
           </div>
+
         </div>
+
       ) : null}
       {checkArchived ? (
         <ArchivedCall
