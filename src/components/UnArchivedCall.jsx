@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import { archiveCall, getCallDetailsById } from '../services/call'
+import "../App.css"
 import moment from 'moment'
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import DownArrow from "../assests/down-arrow.png";
-import LeftArrow from "../assests/icons8-left-50.png";
 
 
-const ArchivedCall = ({ list, checkArchived, setCheckArchived }) => {
+const UnArchivedCall = ({ list }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
@@ -23,7 +23,7 @@ const ArchivedCall = ({ list, checkArchived, setCheckArchived }) => {
 
   const handleArchiveAndClose = (data) => {
     handleArchived(data);
-    handleClose(); // Close the Popover after handling the archived action
+    handleClose(); 
   };
 
 
@@ -31,7 +31,6 @@ const ArchivedCall = ({ list, checkArchived, setCheckArchived }) => {
     try {
       let params = { is_archived: !data?.is_archived }
       let id = data?.id
-
       const response = await archiveCall(id, params)
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -47,19 +46,9 @@ const ArchivedCall = ({ list, checkArchived, setCheckArchived }) => {
     }
   }
 
-
-
   return (
-    < div >
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <img
-          src={LeftArrow}
-          onClick={() => setCheckArchived(!checkArchived)}
-          alt="Left Arrow"
-          style={{ width: '30px', height: '30px', cursor: 'pointer' }}
-        />
-        <h2 style={{ marginLeft: '10px' }}>Archived Call</h2>
-      </div>
+    < div  >
+      <h2>Aircall Phone</h2>
       <ul className="chat-list">
         {list.map((contact) => (
           contact?.to && (
@@ -92,22 +81,21 @@ const ArchivedCall = ({ list, checkArchived, setCheckArchived }) => {
                   anchorEl={anchorEl}
                   onClose={handleClose}
                   anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
+                    vertical: 'right',
+                    horizontal: 'right',
                   }}
                   PaperProps={{ elevation: 0 }}
                 >
 
-                  <Typography sx={{ p: 2, cursor: 'pointer', border: '1px solid #ccc', display: 'flex', justifyContent: 'flex-end' }} onClick={() => handleArchiveAndClose(contact)}>Archive</Typography>
+                  <Typography sx={{ p: 2, cursor: 'pointer', border: '1px solid #ccc',borderRadius:'12px', display: 'flex', justifyContent: 'flex-end' }} onClick={() => handleArchiveAndClose(contact)}>Archive</Typography>
                 </Popover>
               </div>
             </li>
           )
         ))}
       </ul>
+    </div>
+  );
+};
 
-    </ div>
-  )
-}
-
-export default ArchivedCall
+export default UnArchivedCall
