@@ -149,10 +149,21 @@ const CallList = () => {
       const sortedCallListArchived = sortCallList(archivedCalllist)
       const sortedCallListUnArchived = sortCallList(unarchivedCalllist)
 
+      const sortedData = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+      // Group the sorted data by date
+      const groupedData = sortedData.reduce((result, item) => {
+        const date = item.created_at.split('T')[0]; // Extracting the date part
+        result[date] = result[date] || [];
+        result[date].push(item);
+        return result;
+      }, {});
+
+      console.log(groupedData, 'groupedData')
 
       // const groupedByDay = sortedCallListArchived.reduce((result, item) => {
       //   const date = new Date(item.created_at).toLocaleDateString();
-      //   console.log(date,'...............date')
+      //   console.log(date, '...............date')
       //   if (!result[date]) {
       //     result[date] = [];
       //   }
@@ -160,7 +171,7 @@ const CallList = () => {
       //   return result;
       // }, {});
 
-      //  console.log(groupedByDay,'..............groupedByDay')
+      // console.log(groupedByDay, '..............groupedByDay')
 
       setArchivedCallList(sortedCallListArchived)
       setCallList(sortedCallListUnArchived)
@@ -173,13 +184,13 @@ const CallList = () => {
     fetchActivitiesData();
   }, []);
 
-  return (    
+  return (
     <div className="aircall-phone-container">
-      <TopNavbar/>
+      <TopNavbar />
       {!checkArchived ?
-        <div style={{ display: 'flex',paddingLeft:'10px', alignItems: 'center', border: '1px solid #ccc',borderRadius:'10px' }}>
+        <div style={{ display: 'flex', paddingLeft: '10px', alignItems: 'center', border: '1px solid #ccc', borderRadius: '10px' }}>
           <img src={ArchiveIcon} style={{ width: '20px', height: '20px' }} />
-          <div className="chat-item" style={{ fontSize: '20px', color: 'gray', marginLeft: '5px', cursor: 'pointer',marginBottom:'20px',marginTop:'10px' }} onClick={() => setCheckArchived(!checkArchived)}>
+          <div className="chat-item" style={{ fontSize: '20px', color: 'gray', marginLeft: '5px', cursor: 'pointer', marginBottom: '20px', marginTop: '10px' }} onClick={() => setCheckArchived(!checkArchived)}>
             Archived ({archivedCallList?.length})
           </div>
         </div>
@@ -191,7 +202,7 @@ const CallList = () => {
         :
         <UnArchivedCall list={callList} />
       }
-      <Navbar/>
+      <Navbar />
     </div>
   );
 };
