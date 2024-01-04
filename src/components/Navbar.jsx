@@ -1,4 +1,3 @@
-// Navbar.js
 
 import React from "react";
 import { MdCall, MdSettings } from "react-icons/md";

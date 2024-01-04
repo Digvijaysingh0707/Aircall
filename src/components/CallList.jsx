@@ -187,21 +187,38 @@ const CallList = () => {
   return (
     <div className="aircall-phone-container">
       <TopNavbar />
-      {!checkArchived ?
-        <div style={{ display: 'flex', paddingLeft: '10px', alignItems: 'center', border: '1px solid #ccc', borderRadius: '10px' }}>
-          <img src={ArchiveIcon} style={{ width: '20px', height: '20px' }} />
-          <div className="chat-item" style={{ fontSize: '20px', color: 'gray', marginLeft: '5px', cursor: 'pointer', marginBottom: '20px', marginTop: '10px' }} onClick={() => setCheckArchived(!checkArchived)}>
+      {!checkArchived ? (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            borderBottom: "1px solid #ccc",
+          }}
+        >
+          <img src={ArchiveIcon} style={{ width: "20px", height: "20px" }} />
+          <div
+            className="chat-item"
+            style={{
+              fontSize: "20px",
+              color: "gray",
+              marginLeft: "5px",
+              cursor: "pointer",
+            }}
+            onClick={() => setCheckArchived(!checkArchived)}
+          >
             Archived ({archivedCallList?.length})
           </div>
         </div>
-
-        : null
-      }
-      {checkArchived ?
-        <ArchivedCall list={archivedCallList} checkArchived={checkArchived} setCheckArchived={setCheckArchived} />
-        :
-        <UnArchivedCall list={callList} />
-      }
+      ) : null}
+      {checkArchived ? (
+        <ArchivedCall
+          list={archivedCallList}
+          checkArchived={checkArchived}
+          setCheckArchived={setCheckArchived}
+        />
+      ) : (
+        <UnArchivedCall list={callList} fetchActivitiesData={fetchActivitiesData} />
+      )}
       <Navbar />
     </div>
   );
