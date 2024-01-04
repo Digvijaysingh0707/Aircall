@@ -8,16 +8,21 @@
 }
 
 .chat-list {
-  list-style: none;
+  list-style-type: none;
   padding: 0;
 }
 
 .chat-item {
+  border-bottom: 1px dashed #ccc;
+  padding: 10px;
+  padding-bottom: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
-  border-bottom: 1px solid #eee;
+}
+
+.chat-item:last-child {
+  border-bottom: none;
 }
 
 .direction {
@@ -25,8 +30,9 @@
 }
 
 .call-type {
-  color: #555;
-  margin-right: 10px;
+  font-size: 12px;
+  color: gray;
+  margin-top: 5px;
 }
 
 button {
@@ -36,4 +42,116 @@ button {
   padding: 5px 10px;
   cursor: pointer;
   border-radius: 4px;
+}
+
+.contact-history-container {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.contact-details {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.timestamp {
+  font-size: 12px;
+  color: gray;
+  margin-top: 5px;
+}
+
+.options {
+  display: flex;
+  align-items: center;
+}
+
+.call {
+  margin-right: 10px;
+  margin-left: -10px;
+}
+
+.call-image {
+  width: 20px;
+  height: 20px;
+}
+
+/* -------------------navbar css-------------------- */
+
+.navbar {
+  bottom: 0;
+  width: 110%;
+  height: 3rem;
+  background-color: #f4f0f0;
+  align-items: center;
+  margin-left: -20px;
+  margin-bottom: -20px;
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+  box-shadow: 0 0 10px rgba(240, 236, 236, 0.1);
+}
+
+.nav-list {
+  list-style-type: none;
+  padding: 0;
+  padding-top: 5px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.nav-item {
+  font-size: 20px;
+  opacity: 0.7;
+}
+
+.dialpad-icon {
+  font-size: 35px;
+}
+
+.dialpad {
+  padding: 1px;
+  align-items: center;
+}
+
+.bell-icon{
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid rgb(128, 124, 124);
+  background-color: transparent;
+}
+
+.inner-circle {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+}
+
+
+
+/* ------------------------TopNavbar---------------------------- */
+.t-navbar{
+  display: flex;
+  justify-content: space-around;
+  font: 500;
+  /* border-bottom: 1px solid #ccc; */
+  align-items: center;
+}
+
+.activity{
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap:10px
+}
+
+.activity-icon{
+  width: 30px;
+  height: 30px;
 }

@@ -4,6 +4,9 @@ import ArchivedCall from './ArchivedCall';
 import UnArchivedCall from './UnArchivedCall';
 import "../App.css"
 import ArchiveIcon from "../assests/archive.png";
+import Navbar from './Navbar';
+import TopNavbar from './TopNavbar';
+
 
 const options = [
   {
@@ -139,10 +142,8 @@ const CallList = () => {
 
   const fetchActivitiesData = async () => {
     try {
-      // const response = await getCallList();
-      // const data = response?.data
-      const data = options
-      console.log("callList",data)
+      const response = await getCallList();
+      const data = response?.data
       const unarchivedCalllist = data?.filter(item => item?.is_archived == false)
       const archivedCalllist = data?.filter(item => item?.is_archived == true)
       const sortedCallListArchived = sortCallList(archivedCalllist)
@@ -174,10 +175,11 @@ const CallList = () => {
 
   return (    
     <div className="aircall-phone-container">
-=      {!checkArchived ?
-        <div style={{ display: 'flex', alignItems: 'center', borderBottom: '1px solid #ccc' }}>
+      <TopNavbar/>
+      {!checkArchived ?
+        <div style={{ display: 'flex',paddingLeft:'10px', alignItems: 'center', border: '1px solid #ccc',borderRadius:'10px' }}>
           <img src={ArchiveIcon} style={{ width: '20px', height: '20px' }} />
-          <div className="chat-item" style={{ fontSize: '20px', color: 'gray', marginLeft: '5px', cursor: 'pointer' }} onClick={() => setCheckArchived(!checkArchived)}>
+          <div className="chat-item" style={{ fontSize: '20px', color: 'gray', marginLeft: '5px', cursor: 'pointer',marginBottom:'20px',marginTop:'10px' }} onClick={() => setCheckArchived(!checkArchived)}>
             Archived ({archivedCallList?.length})
           </div>
         </div>
@@ -189,6 +191,7 @@ const CallList = () => {
         :
         <UnArchivedCall list={callList} />
       }
+      <Navbar/>
     </div>
   );
 };

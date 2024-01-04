@@ -4,8 +4,11 @@ import moment from 'moment'
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import DownArrow from "../assests/down-arrow.png";
 import LeftArrow from "../assests/icons8-left-50.png";
+
+import { HiOutlineDotsVertical } from "react-icons/hi";
+import incommingCall from "../assests/incomming-.png";
+import missedCall from "../assests/missed-call.png";
 
 
 const ArchivedCall = ({ list, checkArchived, setCheckArchived }) => {
@@ -60,50 +63,79 @@ const ArchivedCall = ({ list, checkArchived, setCheckArchived }) => {
         />
         <h2 style={{ marginLeft: '10px' }}>Archived Call</h2>
       </div>
-      <ul className="chat-list">
-        {list.map((contact) => (
-          contact?.to && (
-            <li key={contact?.id} className="chat-item" >
-
-              <span
-                style={{
-                  cursor: 'pointer',
-                  color: 'red',
-                  fontSize: '25px',
-                  fontWeight: 'bold'
-                }}
-                onClick={() => handleLinkClick(contact?.id)}
-                className="direction"
-              >
-                {contact.to ?? "NA"}
-              </span>
-              <span style={{ fontSize: '12px', color: 'gray', marginLeft: '5px' }}>{contact.call_type ?? "NA"}</span>
-              <span style={{ fontSize: '12px', color: 'gray', marginLeft: '5px', float: 'right' }}>
-                {moment(contact?.created_at).format('hh:mm A')}
-              </span>
-
-              <div>
-                <Button aria-describedby={id} onClick={handleClick}>
-                  <img src={DownArrow} alt="Down Arrow" style={{ width: '16px', height: '16px' }} />
-                </Button>
-                <Popover
-                  id={id}
-                  open={open}
-                  anchorEl={anchorEl}
-                  onClose={handleClose}
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                  }}
-                  PaperProps={{ elevation: 0 }}
-                >
-
-                  <Typography sx={{ p: 2, cursor: 'pointer', border: '1px solid #ccc', display: 'flex', justifyContent: 'flex-end' }} onClick={() => handleArchiveAndClose(contact)}>Archive</Typography>
-                </Popover>
-              </div>
-            </li>
-          )
-        ))}
+      <ul
+        className="chat-list"
+        style={{
+          border: '1px solid #ccc',
+          borderRadius: "10px",
+          paddingLeft: "1rem",
+          paddingBottom: "1rem",
+        }}
+      >
+        {list.map(
+          (contact) =>
+            contact?.to && (
+              <li key={contact?.id} className="chat-item">
+                <div className="call">
+                  {contact.call_type === "missed" ? (
+                    <img src={missedCall} className="call-image" />
+                  ) : (
+                    <img src={incommingCall} className="call-image" />
+                  )}
+                </div>
+                <div className="contact-details">
+                  <span
+                    style={{
+                      cursor: "pointer",
+                      color: "red",
+                      fontSize: "20px",
+                      fontWeight: "bold",
+                    }}
+                    onClick={() => handleLinkClick(contact?.id)}
+                    className="direction"
+                  >
+                    {contact.to ?? "NA"}
+                  </span>
+                  <span className="call-type">
+                    {contact.call_type ?? "NA"}
+                  </span>
+                </div>
+                <div className="options">
+                  <Button aria-describedby={id} onClick={handleClick}>
+                    <HiOutlineDotsVertical style={{ color: "gray" }} />
+                  </Button>
+                  <Popover
+                    id={id}
+                    open={open}
+                    anchorEl={anchorEl}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                      vertical: "bottom",
+                      horizontal: "right",
+                    }}
+                    PaperProps={{ elevation: 0 }}
+                  >
+                    <Typography
+                      sx={{
+                        p: 2,
+                        cursor: "pointer",
+                        border: "1px solid #ccc",
+                        borderRadius: "12px",
+                        display: "flex",
+                        justifyContent: "flex-end",
+                      }}
+                      onClick={() => handleArchiveAndClose(contact)}
+                    >
+                      Archive
+                    </Typography>
+                  </Popover>
+                </div>
+                <span className="timestamp">
+                  {moment(contact?.created_at).format("hh:mm A")}
+                </span>
+              </li>
+            )
+        )}
       </ul>
 
     </ div>
