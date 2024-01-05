@@ -1,126 +1,153 @@
-import React, { useState } from 'react'
-import { archiveCall, getCallDetailsById } from '../services/call'
-import moment from 'moment'
-import Popover from '@mui/material/Popover';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import DownArrow from "../assests/down-arrow.png";
+import React, { useEffect, useState } from "react";
+import { archiveCall } from "../services/call";
+import moment from "moment";
+import Button from "@mui/material/Button";
 import LeftArrow from "../assests/icons8-left-50.png";
 import { MdCallMissed, MdCallReceived } from "react-icons/md";
+import {
+  calculatePeriod,
+  calculateDaysFromToday,
+} from "../utils/helperFunctions";
 
-const ArchivedCall = ({ list, checkArchived, setCheckArchived }) => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
-  const [toggleArchiveButton, setToggleArchiveButton] = useState([])
-  const id = open ? 'simple-popover' : undefined;
+const ArchivedCall = ({ list, checkArchived, setCheckArchived, fetchActivitiesData }) => {
+  const [toggleArchiveButton, setToggleArchiveButton] = useState([]);
+  const [newList, setNewList] = useState([]);
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+ const updateCallArray = (list) => {
+    const updatedArray = list.map((call) => {
+      const daysDifference = calculateDaysFromToday(call.created_at);
+      const callDay = daysDifference;
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+      return { ...call, call_day: callDay };
+    });
 
-  const handleArchiveAndClose = (data) => {
-    handleArchived(data);
-    handleClose(); // Close the Popover after handling the archived action
+    return updatedArray;
   };
 
   const toggleArchive = (i) => {
-    let archiveButtonList = []
-    archiveButtonList[i] = true
-    setToggleArchiveButton(archiveButtonList)
-  }
+    let archiveButtonList = [];
+    archiveButtonList[i] = true;
+    setToggleArchiveButton(archiveButtonList);
+  };
 
   const handleArchived = async (data, i) => {
     try {
-      toggleArchive(i)
-      let params = { is_archived: !data?.is_archived }
-      let id = data?.id
-      const response = await archiveCall(id, params)
-      setToggleArchiveButton([])
+      toggleArchive(i);
+      let params = { is_archived: !data?.is_archived };
+      let id = data?.id;
+      const response = await archiveCall(id, params);
+      setToggleArchiveButton([]);
+      fetchActivitiesData()
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error("Error fetching data:", error);
     }
-  }
+  };
 
   const formatPhoneNumber = (phoneNumber) => {
-    console.log(phoneNumber);
+
     const temp = phoneNumber.toString();
     if (temp && temp?.length >= 2) {
-      // Insert a dash after the first two digits
-      console.log(`${temp.substring(0, 2)}-${temp.substring(2)}`);
       return `${temp.substring(0, 2)}-${temp.substring(2)}`;
     }
     return phoneNumber;
   };
 
+  useEffect(() => {
+    if (list?.length > 0) {
+      const updatedList = updateCallArray(list);
+      updatedList?.length > 0 ? setNewList(updatedList) : setNewList([]);
+    }
+  }, [list]);
+
 
   return (
-    < div  >
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '-30px' }}>
+    <div>
+      <div
+        style={{ display: "flex", alignItems: "center", marginBottom: "-30px" }}
+      >
         <img
           src={LeftArrow}
           onClick={() => setCheckArchived(!checkArchived)}
           alt="Left Arrow"
-          style={{ width: '30px', height: '30px', cursor: 'pointer' }}
+          style={{ width: "30px", height: "30px", cursor: "pointer" }}
         />
-        <h2 style={{ marginLeft: '10px' }}>Archived Call</h2>
+        <h2 style={{ marginLeft: "10px" }}>Archived Call</h2>
       </div>
       <ul className="chat-list">
-        {list.map(
-          (contact, i) =>
-            contact?.to &&
-            contact.from && (
-              <li key={contact?.id} className="chat-item ccc" onClick={() => toggleArchive(i)} style={{ paddingBottom: '8px', border: '1px solid #dfdfdf', borderRadius: '10px', margin: '20px 20px 10px 5px', padding: '15px 15px 15px 15px' }}  >
-                <div className="call">
-                  {contact.call_type === "missed" ? (
-                    <MdCallMissed size={25} style={{ color: "red" }} />
-                  ) : (
-                    <MdCallReceived size={25} style={{ color: "green" }} />
-                  )}
-                </div>
-                <div className="contact-details">
-                  <span
-                    style={{
-                      color: "black",
-                      fontSize: "20px",
-                      fontWeight: "bold",
-                      fontFamily: "",
-                    }}
-                    className="direction"
-                  >
-                    {contact.from && formatPhoneNumber(contact.from)}
-                  </span>
-                  <span className="call-type">
-                    tried to call {contact.to ?? "NA"}
-                  </span>
-                </div>
-
-                {!toggleArchiveButton?.[i] ?
-                  <span className="timestamp">
-                    {moment(contact?.created_at).format("hh:mm A")}
-                  </span>
-                  :
-                  <div>
-                    <Button style={{ border: '1px solid gray', color: 'gray', height: '30px' }} onClick={(e) => {
-                      e.stopPropagation();
-                      handleArchived(contact, i);
-                    }}>
-                      Unarchive
-                    </Button>
-
+        {newList &&
+          newList?.length > 0 &&
+          newList.map(
+            (contact, i) =>
+              contact?.to &&
+              contact.from && (
+                <li
+                  key={contact?.id}
+                  className="chat-item ccc"
+                  onClick={() => toggleArchive(i)}
+                  style={{
+                    paddingBottom: "8px",
+                    border: "1px solid #dfdfdf",
+                    borderRadius: "10px",
+                    margin: "20px 20px 10px 5px",
+                    padding: "15px 15px 15px 15px",
+                  }}
+                >
+                  <div className="call">
+                    {contact.call_type === "missed" ? (
+                      <MdCallMissed size={25} style={{ color: "red" }} />
+                    ) : (
+                      <MdCallReceived size={25} style={{ color: "green" }} />
+                    )}
                   </div>
-                }
-              </li>
-            )
-        )}
+                  <div className="contact-details">
+                    <span
+                      style={{
+                        color: "black",
+                        fontSize: "20px",
+                        fontWeight: "bold",
+                        fontFamily: "",
+                      }}
+                      className="direction"
+                    >
+                      {contact.from && formatPhoneNumber(contact.from)}
+                    </span>
+                    <span className="call-type" style={{ color: contact.call_type === "missed" ? "red" : null }}>
+                      tried to call {contact.to ?? "NA"}
+                    </span>
+                  </div>
 
+                  {!toggleArchiveButton?.[i] ? (
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                      <span className="timestamp" >
+                        {moment(contact?.created_at).format("hh:mm A")}
+                      </span>
+                      <span className="timestamp" >
+                        {calculatePeriod(contact.call_day)}
+                      </span>
+                    </div>
+                  ) : (
+                    <div>
+                      <Button
+                        style={{
+                          border: "1px solid gray",
+                          color: "gray",
+                          height: "30px",
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleArchived(contact, i);
+                        }}
+                      >
+                        Unarchive
+                      </Button>
+                    </div>
+                  )}
+                </li>
+              )
+          )}
       </ul>
+    </div>
+  );
+};
 
-    </ div>
-  )
-}
-
-export default ArchivedCall
+export default ArchivedCall;
